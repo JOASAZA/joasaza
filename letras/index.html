@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>tiana-catalogo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @font-face {
+      font-family: 'Hockey';
+      src: url('file:///D:/paguina tati/letras/hockey-regular (1).otf') format('opentype');
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Hockey', Arial, sans-serif;
+      background: url('file:///D:/paguina tati/imagen/fondo.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+
+    header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 15px 20px;
+      position: relative;
+    }
+
+    header img.logo {
+      height: 70px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .titulo {
+      font-size: 32px;
+      color: #00ffcc;
+      margin-bottom: 10px;
+    }
+
+    nav {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 8px 15px;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background: #00ffcc;
+      color: black;
+    }
+
+    .catalogo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .producto {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      padding: 10px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+      transition: transform 0.3s;
+    }
+
+    .producto:hover {
+      transform: scale(1.05);
+    }
+
+    .producto img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .precio {
+      font-size: 18px;
+      margin-top: 5px;
+      color: #00ffcc;
+    }
+
+    .acciones {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+
+    .acciones i {
+      cursor: pointer;
+      font-size: 22px;
+      padding: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .acciones i:hover {
+      background: #00ffcc;
+      color: black;
+    }
+
+    .activo {
+      background: #00ffcc !important;
+      color: black !important;
+    }
+
+    .panel {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 350px;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      box-shadow: -2px 0 8px rgba(0, 0, 0, 0.7);
+      transition: right 0.4s;
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 200;
+    }
+
+    .panel.abierto {
+      right: 0;
+    }
+
+    .panel h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #00ffcc;
+    }
+
+    .item-panel {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px;
+      border-radius: 10px;
+    }
+
+    .item-panel img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-right: 10px;
+    }
+
+    .item-panel span {
+      color: white;
+      font-size: 16px;
+    }
+
+    .cerrar {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      color: red;
+      cursor: pointer;
+    }
+
+    #inicioSesion {
+      position: fixed;
+      top: 50px;
+      right: 50px;
+      background: rgba(0, 0, 0, 0.9);
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px solid pink;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 300;
+    }
+
+    #inicioSesion input,
+    #inicioSesion label {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-family: 'Hockey', Arial, sans-serif;
+    }
+
+    #inicioSesion button {
+      padding: 10px;
+      border: none;
+      background-color: #00ffcc;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .file-label {
+      display: inline-block;
+      background-color: #00ffcc;
+      color: black;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .perfil {
+      display: flex;
+      align-items: center;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0,0,0,0.7);
+      padding: 5px 10px;
+      border-radius: 12px;
+      display: none;
+      z-index: 400;
+      gap: 10px;
+    }
+
+    .perfil img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .perfil span {
+      font-size: 18px;
+      color: white;
+    }
+
+    .cerrar-sesion-btn {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="file:///D:/paguina tati/imagen/logo.png" class="logo" onclick="mostrarLogin()">
+    <div class="titulo">TIANA MODA</div>
+    <nav>
+      <a onclick="togglePanel('favoritosPanel')"><i class="fas fa-heart"></i> Favoritos</a>
+      <a onclick="togglePanel('carritoPanel')"><i class="fas fa-shopping-cart"></i> Carrito</a>
+      <a onclick="togglePanel('redesPanel')"><i class="fas fa-share-alt"></i> Redes Sociales</a>
+    </nav>
+  </header>
+
+  <div class="catalogo" id="catalogo"></div>
+
+  <div id="favoritosPanel" class="panel">
+    <span class="cerrar" onclick="togglePanel('favoritosPanel')">X</span>
+    <h2>Favoritos</h2>
+    <div id="favoritosLista"></div>
+  </div>
+
+  <div id="carritoPanel" class="panel">
+    <span class="cerrar" onclick="togglePanel('carritoPanel')">X</span>
+    <h2>Carrito</h2>
+    <div id="carritoLista"></div>
+  </div>
+
+  <div id="redesPanel" class="panel">
+    <span class="cerrar" onclick="togglePanel('redesPanel')">X</span>
+    <h2>Redes Sociales</h2>
+    <p>Email: tativelez226@gmail.com</p>
+    <p>Instagram: tiana.vg27</p>
+    <p>Celular: 0968896364</p>
+  </div>
+
+  <div id="inicioSesion">
+    <span id="cerrarSesion" onclick="cerrarLogin()">X</span>
+    <input type="text" id="usuario" placeholder="Nombre de usuario">
+    <input type="email" id="correo" placeholder="Correo" required autocomplete="email">
+    <input type="password" id="contraseña" placeholder="Contraseña" required>
+    <label class="file-label" for="foto">Elegir foto de perfil</label>
+    <input type="file" id="foto" accept="image/*" required>
+    <button onclick="iniciarSesion()">Ingresar</button>
+  </div>
+
+  <div class="perfil" id="perfilUsuario">
+    <img id="fotoPerfil" src="" alt="Foto Perfil">
+    <span id="nombreUsuarioPerfil">Usuario</span>
+    <button class="cerrar-sesion-btn" onclick="cerrarSesionUsuario()">Cerrar Sesión</button>
+  </div>
+
+  <script>
+    const imagenes = [
+      "D:/paguina tati/imagen/Anthropologie - Swimwear.jpeg",
+      "D:/paguina tati/imagen/BERSHKA_ Online fashion _ Official Store.jpeg",
+      "D:/paguina tati/imagen/Chic & Timeless_ Women’s Fashion Ideas.jpeg",
+      "D:/paguina tati/imagen/descarga (25).jpeg",
+      "D:/paguina tati/imagen/descarga (26).jpeg",
+      "D:/paguina tati/imagen/descarga (27).jpeg",
+      "D:/paguina tati/imagen/28.jpeg",
+      "D:/paguina tati/imagen/HADYN BLACK LEATHER curated on LTK.jpeg",
+      "D:/paguina tati/imagen/23.jpeg",
+      "D:/paguina tati/imagen/56.jpeg",
+      "D:/paguina tati/imagen/67.jpeg",
+      "D:/paguina tati/imagen/78.jpeg",
+      "D:/paguina tati/imagen/vegan - Lulus Search.jpeg",
+      "D:/paguina tati/imagen/98.jpeg"
+    ];
+
+    const catalogo = document.getElementById('catalogo');
+    const favoritosLista = document.getElementById('favoritosLista');
+    const carritoLista = document.getElementById('carritoLista');
+
+    let favoritos = [];
+    let carrito = [];
+
+    imagenes.forEach((ruta, index) => {
+      const precio = (Math.random() * 9 + 1).toFixed(2);
+
+      const producto = document.createElement('div');
+      producto.classList.add('producto');
+
+      producto.innerHTML = `
+        <img src="file:///${ruta}" alt="Producto ${index + 1}">
+        <div class="precio">$${precio}</div>
+        <div class="acciones">
+          <i class="fas fa-heart" onclick="agregarAFavoritos(this, '${ruta}', ${precio})"></i>
+          <i class="fas fa-shopping-cart" onclick="agregarACarrito(this, '${ruta}', ${precio})"></i>
+        </div>
+      `;
+
+      catalogo.appendChild(producto);
+    });
+
+    function agregarAFavoritos(icono, ruta, precio) {
+      icono.classList.toggle('activo');
+      favoritos.push({ ruta, precio });
+      mostrarLista(favoritos, favoritosLista);
+    }
+
+    function agregarACarrito(icono, ruta, precio) {
+      icono.classList.toggle('activo');
+      carrito.push({ ruta, precio });
+      mostrarLista(carrito, carritoLista);
+    }
+
+    function mostrarLista(lista, contenedor) {
+      contenedor.innerHTML = "";
+      lista.forEach(item => {
+        const div = document.createElement('div');
+        div.classList.add('item-panel');
+        div.innerHTML = `
+          <img src="file:///${item.ruta}" alt="item">
+          <span>$${item.precio.toFixed(2)}</span>
+        `;
+        contenedor.appendChild(div);
+      });
+    }
+
+    function togglePanel(id) {
+      document.getElementById(id).classList.toggle('abierto');
+    }
+
+    // ====== Inicio de sesión ======
+    window.onload = function() {
+      const usuarioGuardado = localStorage.getItem('usuario');
+      const fotoGuardada = localStorage.getItem('fotoPerfil');
+
+      if (usuarioGuardado && fotoGuardada) {
+        document.getElementById("nombreUsuarioPerfil").textContent = usuarioGuardado;
+        document.getElementById("fotoPerfil").src = fotoGuardada;
+        document.getElementById("perfilUsuario").style.display = "flex";
+      }
+    };
+
+    function mostrarLogin() {
+      document.getElementById("inicioSesion").style.display = "flex";
+    }
+
+    function cerrarLogin() {
+      document.getElementById("inicioSesion").style.display = "none";
+    }
+
+    function iniciarSesion() {
+      const nombre = document.getElementById("usuario").value;
+      const correo = document.getElementById("correo").value;
+      const foto = document.getElementById("foto").files[0];
+
+      if (nombre && correo && foto) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const fotoData = e.target.result;
+          localStorage.setItem('usuario', nombre);
+          localStorage.setItem('fotoPerfil', fotoData);
+
+          document.getElementById("nombreUsuarioPerfil").textContent = nombre;
+          document.getElementById("fotoPerfil").src = fotoData;
+          document.getElementById("perfilUsuario").style.display = "flex";
+          cerrarLogin();
+          alert(`Bienvenido, ${nombre}`);
+        };
+        reader.readAsDataURL(foto);
+      } else {
+        alert("Faltan datos para iniciar sesión.");
+      }
+    }
+
+    function cerrarSesionUsuario() {
+      localStorage.removeItem('usuario');
+      localStorage.removeItem('fotoPerfil');
+      document.getElementById("perfilUsuario").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
